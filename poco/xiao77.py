@@ -48,7 +48,7 @@ def requestUrl(pageurl):
     return r
 
 
-def requestPages(pageurl):
+def requestListPages(pageurl):
     print(pageurl)
 
     html = etree.HTML(requestUrl(pageurl).text) 
@@ -62,23 +62,27 @@ def requestPages(pageurl):
 
             folderName =  ele.text.encode('unicode_escape').decode('string_escape')
             # folderName =  ele.text.decode('utf-8')
-            print(folderName)
             folderName = "imgxiao77/" + folderName
-            print(folderName)
             if not os.path.exists(folderName):
                 os.makedirs(folderName)
             eleFullUrl = baseUrl + eleUrl
             print(eleFullUrl)
+            print(folderName)
+            # eleFullUrl = "http://x771117.net/bbs/read.php?tid=1940188&fpage=5"
+
             #请求子页面  等待1秒
             time.sleep(5)
             eleHtml = etree.HTML(requestUrl(eleFullUrl).text) 
+            # result = etree.tostring(eleHtml)
+            # print(result.decode('utf-8'))
             #寻找页面图片
-            imgEles = eleHtml.xpath('//*[@id="read_tpc"]/img')
+            imgEles = eleHtml.xpath('//*[@id="read_tpc"]//img')
             for imgEle in imgEles:
                 imgUrl = imgEle.attrib["src"]
                 if imgUrl:
                     downloadImg(imgUrl,folderName,eleFullUrl)
-
+                    # return
+ 
 
 def downloadImg(imgUrl,imgPath,referer):
     headers = {
@@ -95,7 +99,7 @@ def main():
     for pageindex in range(1,6):
         pageurl = baseUrl + listUrl + str(pageindex)
         # pageurl = "http://x771117.net/bbs/thread.php?fid=6"
-        requestPages(pageurl)
+        requestListPages(pageurl)
 
 if __name__ == "__main__":
     main()
