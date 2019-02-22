@@ -39,27 +39,32 @@ def requestPages(pageUrl):
     # print(pageListEle)
     for pageEle in pageListEle:
         # folderName = pageEle.text.encode('unicode_escape').decode('string_escape')
-        folderName = pageEle.text.encode('gbk')
-        pageShortUrl = pageEle.attrib["href"]
-        if pageShortUrl:
-            folderName = "fengniao/" + folderName
-        print(folderName)
-        if not os.path.exists(folderName):
-            try:
-                os.makedirs(folderName)
-            except Exception as e:
-                print("create dir error",e)
-            finally:
-                folderName = pageShortUrl
-                os.makedirs(folderName)
+        try:
+            folderName = pageEle.text.encode('gbk')
+            pageShortUrl = pageEle.attrib["href"]
+            if pageShortUrl:
+                folderName = "fengniao/" + folderName
+            print(folderName)
+            if not os.path.exists(folderName):
+                try:
+                    os.makedirs(folderName)
+                except Exception as e:
+                    print("create dir error",e)
+                    folderName = "fengniao/errorDirName"
+                    if not os.path.exists(folderName):
+                        os.makedirs(folderName)
+                
+            pageFullUrl = baseUrl + pageShortUrl
+            requestSinglePage(pageFullUrl,folderName)
+        except Exception as e:
+            print("run request page error",e,pageEle.attrib["href"])
             
-        pageFullUrl = baseUrl + pageShortUrl
-        requestSinglePage(pageFullUrl,folderName)
-        
+            
 
 
 def requestSinglePage(pageUrl,folderName):
     print(pageUrl)
+    # pageUrl = 'http://bbs.fengniao.com/forum/10653533.html'
     #子页面
     r = requests.get(pageUrl,headers= headers)
     html = etree.HTML(r.text)
@@ -122,6 +127,15 @@ if __name__ == "__main__":
 
     # zzz = "中国"
     # print(zzz)
+    # folderName = "fengniao/#索尼微单2月影赛# //// Japan 八甲田 粉雪畅滑 //// ----..."
+    # try:
+    #     os.makedirs(folderName)
+    # except Exception as e:
+    #     print("create dir error",e)
+    # finally:
+    #     folderName = "pageShortUrl"
+    #     os.makedirs(folderName)
+
 
 
 
