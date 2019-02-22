@@ -90,21 +90,21 @@ def requestListPages(pageurl):
             # print(result.decode('utf-8'))
             #寻找页面图片
             imgEles = eleHtml.xpath('//*[@id="read_tpc"]//img')
-            for imgEle in imgEles:
+            for index,imgEle in enumerate(imgEles):
                 imgUrl = imgEle.attrib["src"]
                 if imgUrl:
-                    downloadImg(imgUrl,folderName,eleFullUrl)
+                    downloadImg(imgUrl,folderName,eleFullUrl,index +1)
                     # return
  
 
-def downloadImg(imgUrl,imgPath,referer):
+def downloadImg(imgUrl,imgPath,referer,index=1):
     headers = {
         "User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3626.400 QQBrowser/10.4.3211.400",
         "Referer": referer,
     }
     r = requests.get(imgUrl,headers = headers)
     imgName = imgUrl.split("/")[-1]
-    fileName = "{}/{}".format(imgPath,imgName)
+    fileName = "{}/{}_{}".format(imgPath,index,imgName)
     with open(fileName,'wb') as img:
         img.write(r.content)
 
