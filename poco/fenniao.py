@@ -72,7 +72,7 @@ def requestSinglePage(pageUrl,folderName,isSecond = False):
         if isSecond:
             return
         
-        time.sleep(1)
+        time.sleep(2)
         requestSinglePage(pageUrl,folderName,True)
 
     fullUrl = baseUrl + firstFloorAUrl[0]
