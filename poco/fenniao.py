@@ -61,8 +61,7 @@ def requestPages(pageUrl):
             
             
 
-
-def requestSinglePage(pageUrl,folderName):
+def requestSinglePage(pageUrl,folderName,isSecond = False):
     print(pageUrl)
     # pageUrl = 'http://bbs.fengniao.com/forum/10653533.html'
     #子页面
@@ -70,11 +69,12 @@ def requestSinglePage(pageUrl,folderName):
     html = etree.HTML(r.text)
     firstFloorAUrl =  html.xpath('//div[@class="postMain module1200"]/div[1]/div[2]/div[1]/span[2]/i/../../../div[2]/div[@class="img"]//a/@href')
     if len(firstFloorAUrl) < 1:
-        time.sleep(1)
-        r = requests.get(pageUrl,headers= headers)
-        html = etree.HTML(r.text)
-        firstFloorAUrl =  html.xpath('//div[@class="postMain module1200"]/div[1]/div[2]/div[1]/span[2]/i/../../../div[2]/div[@class="img"]//a/@href')
+        if isSecond:
+            return
         
+        time.sleep(1)
+        requestSinglePage(pageUrl,folderName,True)
+
     fullUrl = baseUrl + firstFloorAUrl[0]
     #获取整个图片浏览的网页
     r = requests.get(fullUrl,headers= headers)
