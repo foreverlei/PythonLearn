@@ -45,7 +45,14 @@ def requestPages(pageUrl):
             folderName = "fengniao/" + folderName
         print(folderName)
         if not os.path.exists(folderName):
-            os.makedirs(folderName)
+            try:
+                os.makedirs(folderName)
+            except Exception as e:
+                print("create dir error",e)
+            finally:
+                folderName = pageShortUrl
+                os.makedirs(folderName)
+            
         pageFullUrl = baseUrl + pageShortUrl
         requestSinglePage(pageFullUrl,folderName)
         
