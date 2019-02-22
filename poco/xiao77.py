@@ -11,7 +11,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 baseUrl = "http://x771117.net/bbs/"
-listUrl = "thread.php?fid=6&page="
+listUrl = "thread.php?fid=18&page="
 currentPage = 1
 
 headers = {
@@ -29,19 +29,31 @@ headers = {
 
 
 cookie_jar = RequestsCookieJar()
-cookie_jar.set("4bd54_ol_offset","166646")
-cookie_jar.set("4bd54_ipstate","1550729151")
-cookie_jar.set("4bd54_readlog","%2C1944825%2C")
-cookie_jar.set("4bd54_c_stamp","1550729821")
-cookie_jar.set("4bd54_lastpos","F6")
-cookie_jar.set("4bd54_lastvisit","674%091550729821%09%2Fbbs%2Fthread.php%3Ffid6")
-cookie_jar.set("sc_is_visitor_unique","rx4629288.1550729958.D340E62FE57B4FF097095612EED92D8C.1.1.1.1.1.1.1.1.1")
+# cookie_jar.set("4bd54_ol_offset","166646")
+# cookie_jar.set("4bd54_ipstate","1550729151")
+# cookie_jar.set("4bd54_readlog","%2C1944825%2C")
+# cookie_jar.set("4bd54_c_stamp","1550729821")
+# cookie_jar.set("4bd54_lastpos","F6")
+# cookie_jar.set("4bd54_lastvisit","674%091550729821%09%2Fbbs%2Fthread.php%3Ffid6")
+# cookie_jar.set("sc_is_visitor_unique","rx4629288.1550729958.D340E62FE57B4FF097095612EED92D8C.1.1.1.1.1.1.1.1.1")
 
 def requestUrl(pageurl):
     r = requests.get(pageurl,headers = headers,cookies = cookie_jar)
     if(len(r.text) < 21):
         time.sleep(1)
+        print("set cookies")
         cookie_jar.set("4bd54_c_stamp",r.cookies["4bd54_c_stamp"])
+        if r.cookies.get("4bd54_ol_offset"):
+            cookie_jar.set("4bd54_ol_offset",r.cookies["4bd54_ol_offset"])
+        if r.cookies.get("4bd54_ipstate"):
+            cookie_jar.set("4bd54_ipstate",r.cookies["4bd54_ipstate"])
+        if r.cookies.get("4bd54_readlog"):
+            cookie_jar.set("4bd54_readlog",r.cookies["4bd54_readlog"])
+        if r.cookies.get("4bd54_lastvisit"):
+            cookie_jar.set("4bd54_lastvisit",r.cookies["4bd54_lastvisit"])
+        if r.cookies.get("sc_is_visitor_unique"):
+            cookie_jar.set("sc_is_visitor_unique",r.cookies["sc_is_visitor_unique"])
+
         r = requests.get(pageurl,headers = headers,cookies = cookie_jar)
         # print(r.text.encode('unicode_escape').decode('string_escape'))
     # return etree.HTML(r.text)
@@ -63,6 +75,7 @@ def requestListPages(pageurl):
             folderName =  ele.text.encode('unicode_escape').decode('string_escape')
             # folderName =  ele.text.decode('utf-8')
             folderName = "imgxiao77/" + folderName
+            
             if not os.path.exists(folderName):
                 os.makedirs(folderName)
             eleFullUrl = baseUrl + eleUrl
