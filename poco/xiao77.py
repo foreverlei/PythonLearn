@@ -10,9 +10,11 @@ import sys
 reload(sys) 
 sys.setdefaultencoding('utf-8')
 
-baseUrl = "http://x771117.net/bbs/"
+baseUrl = "http://x771112.net/bbs/"
 listUrl = "thread.php?fid=18&page="
 currentPage = 1
+
+# requestsSession= requests.Session()
 
 headers = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
@@ -20,11 +22,12 @@ headers = {
     "Accept-Language": "zh-CN,zh;q=0.9",
     "Cache-Control": "max-age=0",
     "Connection": "keep-alive",
-    # "Cookie": "4bd54_ol_offset=166646; 4bd54_ipstate=1550729151; 4bd54_readlog=%2C1944825%2C; 4bd54_c_stamp=1553222087; 4bd54_lastpos=other; 4bd54_lastvisit=1%091553222087%09%2Fbbs%2Fhitcache.php%3Ftid1951796; sc_is_visitor_unique=rx4629288.1553222259.BF25414F54224FF7D85B1CAACD708BCF.1.1.1.1.1.1.1.1.1",
-    "Host": "x771117.net",
-    "Referer": "http://x77556.net/bbs/",
+    "Cookie": "4bd54_threadlog=%2C18%2C; 4bd54_ipstate=1555136489; 4bd54_c_stamp=1555136564; 4bd54_lastpos=T1957483; 4bd54_lastvisit=81%091555136564%09%2Fbbs%2Fread.php%3Ftid1957483; 4bd54_ol_offset=91762; 4bd54_readlog=%2C1957498%2C1957495%2C1957482%2C1957483%2C; sc_is_visitor_unique=rx4629288.1555136610.9C0197DB266E4F7FDFC8DDA37724AA5F.1.1.1.1.1.1.1.1.1",
+    # "Cookie":"sc_is_visitor_unique=rx4629288.1554789480.62B39429975C4FE2012926EB97C60D12.1.1.1.1.1.1.1.1.1; 4bd54_c_stamp=1554789439; 4bd54_lastvisit=0%091554789439%09%2Fbbs%2Fread.php%3Ftid1956629; 4bd54_readlog=%2C1956629%2C",
+    "Host": "x771112.net",
+    "Referer": "http://x771112.net/bbs/",
     "Upgrade-Insecure-Requests": "1",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3626.400 QQBrowser/10.4.3211.400",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3650.400 QQBrowser/10.4.3341.400",
 }
 
 
@@ -90,8 +93,8 @@ def requestListPages(pageurl):
             #请求子页面  等待1秒
             time.sleep(1)
             eleHtml = etree.HTML(requestUrl(eleFullUrl).text) 
-            # result = etree.tostring(eleHtml)
-            # print(result.decode('utf-8'))
+            result = etree.tostring(eleHtml)
+            print(result.decode('utf-8'))
             #寻找页面图片
             imgEles = eleHtml.xpath('//*[@id="read_tpc"]//img')
             for index,imgEle in enumerate(imgEles):
@@ -111,7 +114,14 @@ def downloadImg(imgUrl,imgPath,referer,index=1):
         "Connection":"keep-alive",
         "Host":"img1.imgfiles.info",
         # "Cookie": "4bd54_ol_offset=166646; 4bd54_ipstate=1550729151; 4bd54_readlog=%2C1944825%2C; 4bd54_c_stamp=1553222087; 4bd54_lastpos=other; 4bd54_lastvisit=1%091553222087%09%2Fbbs%2Fhitcache.php%3Ftid1951796; sc_is_visitor_unique=rx4629288.1553222259.BF25414F54224FF7D85B1CAACD708BCF.1.1.1.1.1.1.1.1.1",
+        "Cookie":"4bd54_threadlog=%2C18%2C; 4bd54_ipstate=1555136489; 4bd54_c_stamp=1555136564; 4bd54_lastpos=T1957483; 4bd54_lastvisit=81%091555136564%09%2Fbbs%2Fread.php%3Ftid1957483; 4bd54_ol_offset=91762; 4bd54_readlog=%2C1957498%2C1957495%2C1957482%2C1957483%2C; sc_is_visitor_unique=rx4629288.1555136610.9C0197DB266E4F7FDFC8DDA37724AA5F.1.1.1.1.1.1.1.1.1",
     }
+    # headers["Referer"] = referer
+    # headers["Accept"] = "image/webp,image/apng,image/*,*/*;q=0.8"
+    # headers["Accept-Encoding"] = "gzip, deflate"
+    # headers["Accept-Language"] = "Accept-Language"
+    # headers["Connection"] = "keep-alive"
+    # headers["Host"] = "img1.imgfiles.info"
     try:
         r = requests.get(imgUrl,headers = headers)
         imgName = imgUrl.split("/")[-1]
